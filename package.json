@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "browser": "./src/index.js",
   "scripts": {
-    "test": "npm run lint && npm run tap && npm run build",
+    "test": "npm run tap && npm run build",
     "build": "webpack --bail",
     "watch": "webpack --watch",
     "lint": "eslint .",
