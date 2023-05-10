@@ -86,6 +86,12 @@ class SoundPlayer extends EventEmitter {
          */
         this.playbackRate = 1;
 
+        /**
+         * pm: An additional delay (in seconds) to transition volume on sound stop.
+         * @type {number}
+         */
+        this.stopFadeDecay = 0;
+
         // handleEvent is a EventTarget api for the DOM, however the
         // web-audio-test-api we use uses an addEventListener that isn't
         // compatable with object and requires us to pass this bound function
@@ -276,7 +282,7 @@ class SoundPlayer extends EventEmitter {
         this.isPlaying = true;
 
         const {currentTime, DECAY_DURATION} = this.audioEngine;
-        this.startingUntil = currentTime + DECAY_DURATION;
+        this.startingUntil = currentTime + (DECAY_DURATION + this.stopFadeDecay);
 
         this.emit('play');
     }
@@ -302,9 +308,9 @@ class SoundPlayer extends EventEmitter {
 
         taken.finished().then(() => taken.dispose());
 
-        taken.volumeEffect.set(0);
+        taken.volumeEffect.set(0, this.stopFadeDecay);
         const {currentTime, DECAY_DURATION} = this.audioEngine;
-        taken.outputNode.stop(currentTime + DECAY_DURATION);
+        taken.outputNode.stop(currentTime + (DECAY_DURATION + this.stopFadeDecay));
     }
 
     /**

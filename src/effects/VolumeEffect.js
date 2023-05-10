@@ -38,11 +38,16 @@ class VolumeEffect extends Effect {
      * @private
      * @param {number} value - new value to set effect to
      */
-    _set (value) {
+    _set (value, additionalDecay) {
         this.value = value;
 
         const {gain} = this.outputNode;
         const {currentTime, DECAY_DURATION} = this.audioEngine;
+
+        if (typeof additionalDecay === "number") {
+            gain.linearRampToValueAtTime(value / 100, currentTime + (DECAY_DURATION + additionalDecay));
+            return;
+        }
         gain.linearRampToValueAtTime(value / 100, currentTime + DECAY_DURATION);
     }
 
