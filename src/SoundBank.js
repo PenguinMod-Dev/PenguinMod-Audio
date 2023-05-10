@@ -84,9 +84,10 @@ class SoundBank {
      * Play a sound.
      * @param {Target} target - Target to play for
      * @param {string} soundId - id of sound to play
+     * @param {?number} seconds - seconds to start at
      * @returns {Promise} promise that resolves when the sound finishes playback
      */
-    playSound (target, soundId) {
+    playSound (target, soundId, seconds) {
         const effects = this.getSoundEffects(soundId);
         const player = this.getSoundPlayer(soundId);
 
@@ -101,7 +102,7 @@ class SoundBank {
         effects.setEffectsFromTarget(target);
         player.connect(effects);
 
-        player.play();
+        player.play(seconds);
 
         return player.finished();
     }
